@@ -2,7 +2,6 @@ package StravaAPI;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
@@ -19,8 +18,9 @@ public class Auth {
 
     public static void redirectToAuth() {
 
-        HttpUrl oauthUrl = HttpUrl.Builder()
+        HttpUrl oauthUrl = new HttpUrl.Builder()
             .scheme("https")
+            .build();
 
         Request getOauth = new Request.Builder()
             .url("https://www.strava.com/oauth/authorize")

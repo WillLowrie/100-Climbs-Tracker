@@ -1,13 +1,14 @@
 package app;
 
-import java.io.IOException;
-
-import StravaAPI.*;
+import StravaAPI.APICall;
+import okhttp3.Response;
 
 public class App {
     public static void main(String[] args) {
-        Auth authFlow = new Auth();
+        
+        APICall apiClient = new APICall();
+        Response athlete = apiClient.stravaAPIGet("athlete", null);
+        System.out.println(athlete.toString());
 
-        authFlow.redirectToAuth();
     }
 }

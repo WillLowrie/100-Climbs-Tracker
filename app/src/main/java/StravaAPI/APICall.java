@@ -9,12 +9,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Get {
+public class APICall {
+    // TO-DO: Implement constructor.
 
     private static final OkHttpClient client = new OkHttpClient().newBuilder()
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(10,  TimeUnit.SECONDS)
         .build();
+
+    // For testing purposes only.
+    private static final String accessToken = "416a854b3cf598b0a20b001f80579e34bc7707d5";
 
     public Response stravaAPIGet(String endpoint, Map<String, String> params) {
 
@@ -22,12 +26,8 @@ public class Get {
             .scheme("https")
             .host("www.strava.com")
             .addPathSegment("api")
-            .addPathSegment("v3");
-
-        String[] pathSegmentList = endpoint.split("[/]");
-        for (int i = 0; i < pathSegmentList.length; i++) {
-            stravaGetUrl.addPathSegment(pathSegmentList[i]);
-        }
+            .addPathSegment("v3")
+            .addPathSegments(endpoint); // TO-DO: Check if this works with a no / path.
 
         if (params != null) {
             for(Map.Entry<String, String> param: params.entrySet()) {
@@ -37,6 +37,7 @@ public class Get {
 
         Request getRequest = new Request.Builder()
             .url(stravaGetUrl.build())
+            .addHeader("Authorization", "Bearer " + accessToken)
             .build();
         
         try {
@@ -46,8 +47,8 @@ public class Get {
         } catch (IOException err) {
             // TO-DO: Implement logging over printing.
             System.err.println("Get request failed - " + err);
-            Response errResponse = Response.Builder()
-                .request(stravaGetUrl.build())
+            Response errResponse = new Response.Builder()
+                .request(getRequest)
                 .code(200)
                 .message("IOException")
                 .build();
