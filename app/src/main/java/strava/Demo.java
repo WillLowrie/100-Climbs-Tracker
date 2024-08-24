@@ -1,4 +1,4 @@
-package StravaAPI;
+package strava;
 
 import java.io.IOException;
 import okhttp3.OkHttpClient;

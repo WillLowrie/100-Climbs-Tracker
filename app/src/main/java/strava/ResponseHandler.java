@@ -1,4 +1,4 @@
-package StravaAPI;
+package strava;
 
 import okhttp3.Response;
 
