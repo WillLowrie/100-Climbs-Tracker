@@ -44,9 +44,8 @@ public class Get {
             Response getResponse = client.newCall(getRequest).execute();
             return getResponse;
         } catch (IOException err) {
-            // TO-DO: Implement exception handling (can use finally to gracefully handle error).
+            // TO-DO: Implement logging over printing.
             System.err.println("Get request failed - " + err);
-        } finally {
             Response errResponse = Response.Builder()
                 .request(stravaGetUrl.build())
                 .code(200)
