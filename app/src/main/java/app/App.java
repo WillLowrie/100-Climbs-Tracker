@@ -2,17 +2,20 @@ package app;
 
 import java.io.IOException;
 
-import StravaAPI.*;
+import kotlin.jvm.internal.PackageReference;
+import okhttp3.Response;
+import strava.StravaAPI;
 
 public class App {
     public static void main(String[] args) {
-        Demo demo = new Demo();
-        try {
-            String issPosition = demo.getIssPosition();
-            System.out.println(issPosition);
+        
+        StravaAPI strava = new StravaAPI();
+        Response athlete = strava.getEndpoint("athlete", null);
+        try{
+            System.out.println(athlete.body().string());
+        } catch (IOException err) {
+            System.err.println(err);
         }
-        catch (IOException err) {
-            System.out.println(err);
-        }
+
     }
 }
