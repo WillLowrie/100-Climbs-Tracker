@@ -117,5 +117,31 @@ public class StravaAPI {
             return errResponse;
         } 
     }
+
+    public Request getOAuthRequest() {
+        // TO-DO: How to open browser window to initiate auth flow?
+
+        HttpUrl stravaAuthUrl = stravaBaseUrl
+            .addPathSegment("oauth")
+            .addPathSegment("authorize")
+            .addQueryParameter("client_id", clientId)
+            .addQueryParameter("response_type", "code")
+            .addQueryParameter("redirect_uri", "http://localhost/exchange_token")
+            .addQueryParameter("approval_promt", "force")
+            .addQueryParameter("scope", "read")
+            .build();
+
+        logger.info("Calling OAuth enpoint: " + stravaAuthUrl);
+        System.out.println("Calling OAuth endpoint: " + stravaAuthUrl);
+
+        Request authRequest = new Request.Builder()
+            .url(stravaAuthUrl)
+            .build();
+
+        logger.debug("Detailed auth endpoint request: " + authRequest);
+        System.out.println("Detailed auth endpoint request: " + authRequest);
+        
+        return authRequest; 
+    }
     
 }

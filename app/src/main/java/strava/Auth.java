@@ -1,64 +1,29 @@
 package strava;
 
+import java.awt.Desktop;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Response;
-import strava.Athlete;
-import strava.ResponseHandler;
-import okhttp3.Request;
+import strava.StravaAPI;
 
 public class Auth {
 
-    private static final OkHttpClient client = new OkHttpClient().newBuilder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10,  TimeUnit.SECONDS)
-        .build();
+    private static final StravaAPI strava = new StravaAPI();
 
-    public static void redirectToAuth() {
+    public void initiateOAuthFlow() {
 
-        HttpUrl oauthUrl = new HttpUrl.Builder()
-            .scheme("https")
-            .build();
-
-        Request getOauth = new Request.Builder()
-            .url("https://www.strava.com/oauth/authorize")
-            .build();
+        HttpUrl oAuthRequestUrl = strava.getOAuthRequest().url();
 
         try {
-            Response authResponse = client.newCall(getOauth).execute();
-            System.out.println(authResponse);
-        } catch (IOException err) {
-            // TO-DO: Implement this error handling.
-            System.out.println(err.getMessage());
-        }
-
-    }
-
-    public boolean verifyAuth() {
-        // Verifies required athelete information can be retrieved.
-        
-        OkHttpClient client = new OkHttpClient();
-
-        try {
-            Response athlete = Athlete.getAthlete(client);
-            if (athlete.isSuccessful()) {
-                return true;
-            } else {
-                ResponseHandler.handleBadResponse(athlete);
-                return false;
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            Desktop.getDesktop().browse(new URI(oAuthRequestUrl.toString()));
             }
-        } catch (IOException err) {
-            // TO-DO: Implement this error handling.
-            System.out.println(err.getMessage());
-            return false;
+        } catch (IOException | URISyntaxException err) {
+            System.err.println(err);
         }
 
-    }
-
-    public static void authFlow() {
-        // TO-DO: Implement OAuth2 flow.
     }
     
 }
